@@ -14,7 +14,7 @@ from itsdangerous import URLSafeTimedSerializer
 from authlib.integrations.flask_client import OAuth
 from flask_migrate import Migrate
 
-
+db = SQLAlchemy()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get( 'SECRET_KEY','dev')
 app.config['SESSION_COOKIE_SECURE'] = True
@@ -40,7 +40,7 @@ app.config['SQLALCHEMY_DATABASE_URI']= os.environ.get("DATABASE_URL")
 
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-db = SQLAlchemy(app)
+db.init_app(app)
 migrate = Migrate(app, db)
 
 bcrypt= Bcrypt(app)
