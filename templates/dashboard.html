@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styledash.css') }}">
 </head>
 <body>
   <section>
     <div class="dashboard-box">
-       {% if user.photo %}
+
+      {% if user.picture %}
         <div class="profile-photo">
-          <img src="{{ url_for('static', filename='uploads/'~ user.photo) }}" alt="Profile Photo">
+          <img src="{{ user.picture }}" alt="Profile Photo">
         </div>
       {% endif %}
-      <h2>Welcome, {{ user.username }}!</h2>
+
+      <h2>Welcome, {{ user.name }}!</h2>
+
       <div class="info-box">
-        
         <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Phone:</strong> {{ user.phone_number }}</p>
+        <p><strong>Phone:</strong> Not available</p> <!-- Optional: or request after login -->
       </div>
+
       <div class="button-group">
         <a href="{{ url_for('logout') }}" class="btn">Logout</a>
-     
       </div>
     </div>
   </section>
 </body>
 </html>
+
+     
