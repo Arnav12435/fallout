@@ -172,57 +172,22 @@ def google_login():
     return google.authorize_redirect(redirect_uri)
 
 
-@app.route('/login/callback')
+
+
+   
+
+   @app.route('/login/callback')
 def google_callback():
     token = google.authorize_access_token()
-
     resp = google.get('https://openidconnect.googleapis.com/v1/userinfo')
     user_info = resp.json()
-
-    google_id = user_info.get('sub')           
-    email = user_info.get('email')
-    full_name = user_info.get('name') or ""
-    picture = user_info.get('picture')
-
-    # Split full_name into first and last name (very basic split)
-    name_parts = full_name.split()
-    first_name = name_parts[0] if len(name_parts) > 0 else "Google"
-    last_name = " ".join(name_parts[1:]) if len(name_parts) > 1 else "User"
-
-    # Generate a unique username (you may want a better system)
-    username = email.split("@")[0]
-
-    # Dummy password and phone (as they are required fields in your model)
-    dummy_password = "google_oauth_dummy"
-    dummy_phone = "0000000000"
-
-    user = User.query.filter_by(email=email).first()
-
-    if not user:
-        user = User(
-            id=google_id[:10],  # truncate to match id length
-            username=username,
-            first_name=first_name,
-            last_name=last_name,
-            password=dummy_password,
-            email=email,
-            phone_number=dummy_phone,
-            photo=picture,
-            is_admin=False,
-            is_super_admin=False
-        )
-        db.session.add(user)
-        db.session.commit()
-        flash("New user registered via Google.", "success")
-    else:
-        flash("Welcome back!", "success")
-
-    login_user(user)
-    session['user_email'] = user.email
-    session['name'] = f"{user.first_name} {user.last_name}"
-    session['picture'] = user.photo
-
+    session['user_info'] = {
+        'email': user_info.get('email'),
+        'name': user_info.get('name'),
+        'picture': user_info.get('picture')
+    }
     return redirect(url_for('dashboard'))
+
 
 
 
